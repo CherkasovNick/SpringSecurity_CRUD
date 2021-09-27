@@ -30,7 +30,7 @@ public class CarDaoImp implements CarDao{
                 countCars.add(cars.get(i));
             }
             return countCars;
-        } else if (count >= 5) {
+        } else if (count > 5) {
             return cars;
         } else {
             return cars;
