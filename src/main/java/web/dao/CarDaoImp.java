@@ -22,7 +22,7 @@ public class CarDaoImp implements CarDao{
     }
     @Override
     public List<Car> show(Long count) {
-        if(count == 0) {
+        if (count == 0) {
             return cars;
         } else if (count > 0 && count <= 5) {
             List<Car> countCars = new ArrayList<>();
@@ -30,9 +30,13 @@ public class CarDaoImp implements CarDao{
                 countCars.add(cars.get(i));
             }
             return countCars;
+        } else if (count >= 5) {
+            return cars;
         } else {
             return cars;
         }
 
     }
+
+
 }
