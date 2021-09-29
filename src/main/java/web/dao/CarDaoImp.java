@@ -22,6 +22,9 @@ public class CarDaoImp implements CarDao{
     }
     @Override
     public List<Car> show(Long count) {
+        if(count == null) {
+            count = 0L;
+        }
         if (count == 0) {
             return cars;
         } else if (count > 0 && count <= 5) {

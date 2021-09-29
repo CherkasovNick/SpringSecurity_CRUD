@@ -24,14 +24,7 @@ public class CarsController {
 
     @GetMapping("/cars")
     public String carsList(@RequestParam( value = "count", required = false) Long count, Model model) {
-        List<Car> list = new ArrayList<>();
-        if(count != null) {
-            list = carServiceImp.show(count);
-        } else {
-            count = 0L;
-            list = carServiceImp.show(count);
-        }
-
+        List<Car> list = carServiceImp.show(count);
         model.addAttribute("cars", list);
         return "cars";
     }
