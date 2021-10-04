@@ -21,24 +21,8 @@ public class CarDaoImp implements CarDao{
         cars.add(new Car(5, "Land Cruiser", 2006));
     }
     @Override
-    public List<Car> show(Long count) {
-        if(count == null) {
-            count = 0L;
-        }
-        if (count == 0) {
-            return cars;
-        } else if (count > 0 && count <= 5) {
-            List<Car> countCars = new ArrayList<>();
-            for (int i = 0; i < count; i++) {
-                countCars.add(cars.get(i));
-            }
-            return countCars;
-        } else if (count > 5) {
-            return cars;
-        } else {
-            return cars;
-        }
-
+    public List<Car> show() {
+        return cars;
     }
 
 
