@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GetOne</title>
+</head>
+<body>
+<h1>USER</h1>
+
+<table border="1">
+    <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Age</th>
+    <tr>
+
+
+
+            <td th:utext="${user.getId()}">Id</td>
+            <td th:utext="${user.getName()}">Name</td>
+            <td th:utext="${user.getSurname()}">Surname</td>
+            <td th:utext="${user.getAge()}">Age</td>
+
+    </tr>
+
+</table>
+<br/>
+<form th:method="GET" th:action="@{/users/{id}/edit(id=${user.getId()})}">
+    <input type="submit" value="Edit user"/>
+</form>
+<!--<a th:href="@{/users/{id}/edit(id=${user.getId()})}">Edit user</a>-->
+<br/>
+<form th:method="DELETE" th:action="@{/users/{id}(id=${user.getId()})}">
+    <input type="submit" value="Delete user"/>
+</form>
+<br/>
+<form th:method="GET" th:action="@{/users}">
+    <input type="submit" value="Back to list"/>
+</form>
+<!--<a th:href="@{/users}">Back to list</a>-->
+</body>
+</html>
