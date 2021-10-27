@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import web.models.Role;
 import web.models.User;
+import web.service.RoleService;
 import web.service.UserService;
 
 import java.util.List;
@@ -14,8 +16,16 @@ import java.util.List;
 @RequestMapping("/users")
 public class UsersController {
 
-    @Autowired
     private UserService userService;
+    private RoleService roleService;
+    private Role role;
+
+    @Autowired
+    public UsersController(UserService userService, RoleService roleService, Role role) {
+        this.userService = userService;
+        this.roleService = roleService;
+        this.role = role;
+    }
 
     @GetMapping()
     public String getAll(Model model) {
@@ -31,13 +41,16 @@ public class UsersController {
     }
 
     @GetMapping("/new")
-    public String newUser(@ModelAttribute("user") User user) {
+    public String newUser(@ModelAttribute("user") User user, Model model) {
+        model.addAttribute("role", role);
+        model.addAttribute("rolesList", roleService.getAllRoles());
         return "users/new";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("user") User user) {
-        userService.add(user);
+    public String create(@ModelAttribute("user") User user,
+                         @RequestParam("selectedRoles") String[] selectedRoles) {
+        userService.add(user, selectedRoles);
         return "redirect:/users";
     }
 

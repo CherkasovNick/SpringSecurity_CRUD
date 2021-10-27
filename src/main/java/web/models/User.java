@@ -1,7 +1,14 @@
 package web.models;
 
-import javax.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.springframework.stereotype.Component;
 
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+@Component
 @Entity
 @Table(name = "UsersMVC")
 public class User {
@@ -17,16 +24,45 @@ public class User {
     private String surname;
 
     @Column
-    private int age;
+    private String password;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(
+            name = "user_role"
+            , joinColumns = @JoinColumn(name = "user_id")
+            , inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
+
+    public void setRoleToUser(Role role) {
+
+        if(roles == null) {
+            roles = new HashSet<>();
+        }
+        roles.add(role);
+
+    }
 
     public User() {
 
     }
 
-    public User(String name, String surname, int age) {
+    public User(String name, String surname) {
         this.name = name;
         this.surname = surname;
-        this.age = age;
+    }
+
+    public User(String name, String surname, String password) {
+        this.name = name;
+        this.surname = surname;
+        this.password = password;
+    }
+
+    public User(String name, String surname, String password, Set<Role> roles) {
+        this.name = name;
+        this.surname = surname;
+        this.password = password;
+        this.roles = roles;
     }
 
     public String getSurname() {
@@ -57,11 +93,27 @@ public class User {
         this.name = name;
     }
 
-    public int getAge() {
-        return age;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public Role getSingleRole() {
+        Role req = new Role();
+        for(Role role : roles) {
+            req = role;
+        }
+        return req;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
