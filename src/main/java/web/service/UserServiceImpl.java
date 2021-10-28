@@ -2,6 +2,9 @@ package web.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.dao.RoleDao;
@@ -15,17 +18,20 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
 
     private UserDao userDao;
-    private RoleDao roleDao;
+    private RoleService roleService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, RoleDao roleDao) {
+    public UserServiceImpl(UserDao userDao, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
-        this.roleDao = roleDao;
+        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void add(User user, String[] selectedRoles) {
-        user.setRoles(roleDao.getSetRolesToUser(selectedRoles));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(roleService.getSetRolesToUser(selectedRoles));
         userDao.add(user);
     }
 
@@ -49,6 +55,20 @@ public class UserServiceImpl implements UserService{
     @Override
     public void delete(Long id) {
         userDao.delete(id);
+    }
+
+    @Override
+    public User getUserByUsername(String name) {
+        return userDao.getUserByUsername(name);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userDao.getUserByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User '%s' not found!", username));
+        }
+        return user;
     }
 }
 

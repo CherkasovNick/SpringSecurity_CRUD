@@ -18,7 +18,11 @@
   </tr>
 </table>
 <br/>
-<a th:href="@{/users/new}">Create new User</a>
+<a th:href="@{/admin/new}">Create new User</a>
+<br/><br/>
+<form th:method="GET" th:action="@{/logout}">
+    <input type="submit" value="Logout">
+</form>
 
 </body>
 </html>
